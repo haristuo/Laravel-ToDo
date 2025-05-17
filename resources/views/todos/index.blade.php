@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4">
+<div class="container mx-auto px-4 mt-10">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold">Todo Liste</h1>
         <a href="{{ route('todos.create') }}" 
@@ -9,6 +9,10 @@
             + Neue Aufgabe
         </a>
     </div>
+
+<p>Eingeloggt als User-ID: {{ auth()->id() }}</p>
+
+
 
     <div class="bg-white rounded shadow">
         @foreach($todos as $todo)

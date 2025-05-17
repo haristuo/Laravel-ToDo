@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Todo extends Model
 {
-    protected $fillable = ['task', 'date', 'completed'];
+    protected $fillable = ['task', 'date', 'completed', 'user_id'];
     
     protected $casts = [
         'date' => 'datetime',
@@ -18,4 +18,6 @@ class Todo extends Model
     {
         return $this->date?->format('d.m.Y');
     }
+
+
 }

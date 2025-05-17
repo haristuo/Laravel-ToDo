@@ -7,33 +7,41 @@ use Illuminate\Http\Request;
 
 class TodoController extends Controller
 {
-    public function index()
-    {
-        return view('todos.index', [
-            'todos' => Todo::orderBy('created_at', 'desc')->get()
-        ]);
-    }
+   public function index()
+{
+    $todos = Todo::where('user_id', auth()->id())
+             ->latest()
+             ->orderBy('created_at', 'desc')
+             ->get();
+
+    
+    return view('todos.index', compact('todos'));
+}
 
     public function create()
     {
         return view('todos.create');
     }
 
-    public function store(Request $request)
+public function store(Request $request)
 {
-    $request->validate([
+    // Validierte Felder holen
+    $validated = $request->validate([
         'task' => 'required|max:255',
-        'date' => 'nullable|date_format:Y-m-d' // Explizites Format
+        'date' => 'nullable|date_format:Y-m-d'
     ]);
 
-    Todo::create([
-        'task' => $request->task,
-        'date' => $request->date ?: null, // Konvertiere leere Strings zu null
-        'completed' => false
-    ]);
+    // user_id hinzufügen
+    $validated['user_id'] = auth()->id();
+    $validated['completed'] = false;
+    $validated['date'] = $validated['date'] ?: null;
+
+    // speichern
+    Todo::create($validated);
 
     return redirect()->route('todos.index');
 }
+
 
     public function edit(Todo $todo)
     {
